@@ -1,10 +1,13 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dog_application/Bloc/dog_cubit.dart';
 import 'package:dog_application/Bloc/dog_state.dart';
 import 'package:dog_application/Models/dog.dart';
 import 'package:dog_application/Repository/dog_repository.dart';
-import 'package:dog_application/Widget/Dog_widget.dart';
+import 'package:dog_application/Widget/alertdialogwidget.dart';
+import 'package:dog_application/Widget/dogwidget.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -14,6 +17,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,17 +29,16 @@ class _HomeState extends State<Home> {
         create: (context) => DogCubit(SampleDogRepository()),
         child: BlocBuilder<DogCubit, DogState>(
           builder: (context, state) {
+          
             if (state is DogInitial) {
               context.read<DogCubit>().getDog();
               return const SizedBox();
             } else if (state is DogCompleted) {
-              if (state.response != null) {
-                return completed(state.response!);
-              } else {
-                return const Text("Gelen veri null");
-              }
+              return completed(state.response,context);
             } else if (state is DogLoading) {
               return const CircularProgressIndicator();
+            } else if (state is DogError) {
+              return buildError(state);
             } else {
               return const CircularProgressIndicator();
             }
@@ -46,10 +49,10 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildError(DogError? state) {
-    return Text(state?.message ?? "Bir hata oluştu");
+    return Text(state?.message ?? "Error");
   }
 
-  Padding completed(List<Dog> dogList) {
+  Widget completed(List<Dog> dogList,BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 20, left: 20),
       child: Column(
@@ -66,6 +69,10 @@ class _HomeState extends State<Home> {
                 padding: const EdgeInsets.only(left: 10),
                 child: Center(
                   child: TextFormField(
+                    controller: _searchController,
+                    onChanged: (value) {
+                      context.read<DogCubit>().searchDog(value);
+                    },
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Search',
@@ -80,17 +87,19 @@ class _HomeState extends State<Home> {
             height: 20,
           ),
           Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
+            child: GridView.builder(
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
               itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {},
-                  child: SizedBox(
-                    width: 150,
-                    child: Dogwidget(
-                      breedName: dogList[index].breedName ?? '',
-                      onTap: () {},
-                    ),
+                return Container(
+                  margin: EdgeInsets.all(5),
+                  height: 50,
+                  width: 50,
+                  child: Dogwidget(
+                    breedName: dogList[index].breedName,
+                    onTap: () {
+                      showAlertDialog(context, dogList[index].breedName);
+                    },
                   ),
                 );
               },
