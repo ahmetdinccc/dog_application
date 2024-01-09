@@ -7,16 +7,20 @@ import 'package:http/http.dart' as http;
 
 abstract class DogRepository {
   Future<List<Dog>> getDog();
+
 }
 
 class SampleDogRepository implements DogRepository {
   final dogUrl = "https://dog.ceo/api/breeds/list/all";
 
+
   @override
   Future<List<Dog>> getDog() async {
     try {
       final response = await http.get(Uri.parse(dogUrl));
-      print("response" + response.body);
+      if (kDebugMode) {
+        print("response${response.body}");
+      }
 
       if (response.statusCode == HttpStatus.ok) {
         final Map<String, dynamic> jsonData = jsonDecode(response.body);
@@ -41,6 +45,12 @@ class SampleDogRepository implements DogRepository {
       throw NetworkError('Error', e.toString());
     }
   }
+  // String getBreedImage(String breedName){
+
+  //   // istel attın
+  //  // return //foto url;    
+
+  // }
 }
 
 class NetworkError implements Exception {
