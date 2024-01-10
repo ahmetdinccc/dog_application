@@ -7,12 +7,11 @@ import 'package:http/http.dart' as http;
 
 abstract class DogRepository {
   Future<List<Dog>> getDog();
-
+   Future<String> getBreedImage(String breedName);
 }
 
 class SampleDogRepository implements DogRepository {
   final dogUrl = "https://dog.ceo/api/breeds/list/all";
-
 
   @override
   Future<List<Dog>> getDog() async {
@@ -45,13 +44,37 @@ class SampleDogRepository implements DogRepository {
       throw NetworkError('Error', e.toString());
     }
   }
-  // String getBreedImage(String breedName){
 
-  //   // istel attın
-  //  // return //foto url;    
+  
+  @override
+  Future<String> getBreedImage(String breedName) async {
+    try {
+          final breedImageUrl = "https://dog.ceo/api/breed/$breedName/images/random";
+      final response = await http.get(Uri.parse(breedImageUrl));
+      if (response.statusCode == HttpStatus.ok) {
+        final Map<String, dynamic> jsonData = jsonDecode(response.body);
 
-  // }
+        if (jsonData.containsKey('message')) {
+          return jsonData['message'];
+        } else {
+          throw NetworkError('Error', 'Invalid response format');
+        }
+      } else {
+        throw NetworkError(response.statusCode.toString(), response.body);
+      }
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        print(stackTrace.toString());
+      }
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      throw NetworkError('Error', e.toString());
+    }
+  }
 }
+
+
 
 class NetworkError implements Exception {
   final String statusCode;
