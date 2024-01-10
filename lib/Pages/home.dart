@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dog_application/Bloc/dog_cubit.dart';
@@ -29,12 +27,11 @@ class _HomeState extends State<Home> {
         create: (context) => DogCubit(SampleDogRepository()),
         child: BlocBuilder<DogCubit, DogState>(
           builder: (context, state) {
-          
             if (state is DogInitial) {
               context.read<DogCubit>().getDog();
               return const SizedBox();
             } else if (state is DogCompleted) {
-              return completed(state.response,context);
+              return completed(state.response, context);
             } else if (state is DogLoading) {
               return const CircularProgressIndicator();
             } else if (state is DogError) {
@@ -52,7 +49,7 @@ class _HomeState extends State<Home> {
     return Text(state?.message ?? "Error");
   }
 
-  Widget completed(List<Dog> dogList,BuildContext context) {
+  Widget completed(List<Dog> dogList, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 20, left: 20),
       child: Column(
@@ -88,11 +85,11 @@ class _HomeState extends State<Home> {
           ),
           Expanded(
             child: GridView.builder(
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2),
               itemBuilder: (context, index) {
                 return Container(
-                  margin: EdgeInsets.all(5),
+                  margin: const EdgeInsets.all(5),
                   height: 50,
                   width: 50,
                   child: Dogwidget(
