@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dog_application/Pages/bottomnavbar.dart';
+import 'package:dog_application/Pages/bottom_navbar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,6 +12,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
         debugShowCheckedModeBanner: false, 
-        home: MyHomePage());
+        home: Bottomnavbar());
   }
 }

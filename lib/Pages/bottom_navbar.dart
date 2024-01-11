@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:dog_application/Pages/home.dart';
 import 'package:dog_application/Pages/settings.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class Bottomnavbar extends StatefulWidget {
+  const Bottomnavbar({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Bottomnavbar> createState() => _BottomnavbarState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _BottomnavbarState extends State<Bottomnavbar> {
   int _currentIndex = 0;
   final List<Widget> _pages = [const Home(), const Settings()];
 

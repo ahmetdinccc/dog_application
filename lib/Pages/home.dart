@@ -4,8 +4,9 @@ import 'package:dog_application/Bloc/dog_cubit.dart';
 import 'package:dog_application/Bloc/dog_state.dart';
 import 'package:dog_application/Models/dog.dart';
 import 'package:dog_application/Repository/dog_repository.dart';
-import 'package:dog_application/Widget/alertdialogwidget.dart';
+import 'package:dog_application/Widget/alert_dialog_widget.dart';
 import 'package:dog_application/Widget/dogwidget.dart';
+import 'package:dog_application/Widget/search_bar.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -56,28 +57,11 @@ class _HomeState extends State<Home> {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 10),
-            child: Container(
-              height: 60,
-              decoration: BoxDecoration(
-                color: Colors.amber,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Center(
-                  child: TextFormField(
-                    controller: _searchController,
-                    onChanged: (value) {
-                      context.read<DogCubit>().searchDog(value);
-                    },
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Search',
-                      hintStyle: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                ),
-              ),
+            child: Searchbar(
+              searchController: _searchController,
+              onTap: (value) {
+                context.read<DogCubit>().searchDog(value);
+              },
             ),
           ),
           const SizedBox(

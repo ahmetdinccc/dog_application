@@ -1,21 +1,6 @@
 import 'package:dog_application/Repository/dog_repository.dart';
 import 'package:flutter/material.dart';
 
-class AlertWidget extends StatelessWidget {
-  const AlertWidget({
-    Key? key,
-    required this.breedImageUrl,
-    required this.onTap,
-  }) : super(key: key);
-
-  final String breedImageUrl;
-  final Function() onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return showAlertDialog(context, breedImageUrl);
-  }
-}
 
 showAlertDialog(BuildContext context, String breedName) {
   AlertDialog alert = AlertDialog(
